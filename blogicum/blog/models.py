@@ -43,6 +43,7 @@ class Location(Actions):
 
 class Post(Actions):
     '''Публикация.'''
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField('Заголовок', max_length=256)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
