@@ -192,6 +192,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     '''Страница написания комментария.'''
     model = Comment
     form_class = CommentForm
+    queryset = Comment.objects
     posts = None
     pk_url_kwarg = 'post_id'
 
