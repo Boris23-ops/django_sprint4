@@ -1,3 +1,4 @@
+import debug_toolbar
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
@@ -17,10 +18,9 @@ urlpatterns = [
     path('auth/', include('blog.urls'))
 ]
 
-# if settings.DEBUG:
-#     import debug_toolbar
+if settings.DEBUG:
 
-#     urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
+    urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
 
 handler500 = e_handler500
 handler404 = page_not_found
