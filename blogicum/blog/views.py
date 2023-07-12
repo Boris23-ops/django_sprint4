@@ -44,6 +44,7 @@ class PostDetailView(DetailView):
     '''Страница отдельного поста.'''
     model = Post
     template_name = 'blog/detail.html'
+    success_url = reverse_lazy('blog:index')
     pk_url_kwarg = 'post_id'
 
     def get_context_data(self, **kwargs):
