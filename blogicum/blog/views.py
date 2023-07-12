@@ -104,7 +104,9 @@ class ProfileListView(ListView):
                 'location', 'category', 'author'
             ).filter(
                 author=self.author
-            ).order_by('-pub_date').annotate(Count('post_comments'))
+            ).order_by(
+                '-pub_date'
+                ).annotate(comment_count=Count('post_comments'))
 
         return Post.objects.select_related(
             'location', 'category', 'author'
@@ -113,7 +115,7 @@ class ProfileListView(ListView):
             pub_date__lte=timezone.now(),
             is_published=True,
             category__is_published=True,
-        ).order_by('-pub_date').annotate(Count('post_comments'))
+        ).order_by('-pub_date').annotate(comment_count=Count('post_comments'))
 
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
