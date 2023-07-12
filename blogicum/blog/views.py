@@ -56,6 +56,10 @@ class PostDetailView(DetailView):
         )
         return context
 
+    def get_success_url(self):
+        return reverse_lazy('blog:profile',
+                            kwargs={'username': self.object.author.username})
+
 
 class CategoryListView(PaginatorMixin, ListView):
     '''Страница отдельной категории.'''
