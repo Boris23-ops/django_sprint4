@@ -43,7 +43,6 @@ class Location(Actions):
 
 class Post(Actions):
     '''Публикация.'''
-    comments_count = models.IntegerField(default=0)
     title = models.CharField('Заголовок', max_length=256)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
@@ -85,7 +84,6 @@ class Post(Actions):
 
 class Comment(models.Model):
     '''Коммент'''
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text = models.TextField('Текст комментария', max_length=256)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE,
