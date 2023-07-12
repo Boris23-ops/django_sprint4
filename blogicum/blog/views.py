@@ -106,7 +106,9 @@ class ProfileListView(ListView):
                 author=self.author
             ).order_by(
                 '-pub_date'
-                ).annotate(comment_count=Count('post_comments'))
+                ).annotate(
+                comment_count=Count('post_comments')
+                )
 
         return Post.objects.select_related(
             'location', 'category', 'author'
