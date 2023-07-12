@@ -29,13 +29,16 @@ class IndexListView(ListView):
     template_name = 'blog/index.html'
     paginate_by = 10
     pk_url_kwarg = 'post_id'
-    queryset = Post.objects.select_related(
-        'location', 'author', 'category'
-    ).filter(
-        pub_date__lte=timezone.now(),
-        is_published=True,
-        category__is_published=True,
-    ).order_by('-pub_date').annotate(comment_count=Count('post_comments'))
+
+    def get_queryset(self):
+        queryset = Post.objects.select_related(
+            'location', 'author', 'category'
+        ).filter(
+            pub_date__lte=timezone.now(),
+            is_published=True,
+            category__is_published=True,
+        ).order_by('-pub_date').annotate(comment_count=Count('post_comments'))
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
