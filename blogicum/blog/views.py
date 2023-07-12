@@ -51,7 +51,7 @@ class PostDetailView(DetailView):
         context['form'] = CommentForm()
         context['comments'] = (
             self.object.post_comments.select_related(
-                'author'
+                'post'
             ).order_by('created_at')
         )
         return context
@@ -152,6 +152,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     template_name = 'blog/create.html'
     pk_url_kwarg = 'post_id'
+    posts = None
 
     def get_success_url(self):
         return reverse(
@@ -159,10 +160,10 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
             kwargs={'post_id': self.kwargs['post_id']},
         )
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        form.instance.post_id = self.kwargs['post_id']
-        return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_edit'] = True
+        return context
 
     def dispatch(self, request, *args, **kwargs):
         instance = get_object_or_404(Post, pk=self.kwargs['post_id'])
@@ -184,6 +185,11 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
         if post.author != self.request.user:
             return redirect('blog:post_detail', self.kwargs['post_id'])
         return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_delete'] = True
+        return context
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -229,6 +235,11 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
             kwargs={'post_id': self.kwargs['post_id']},
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_edit'] = True
+        return context
+
 
 class CommentDeleteView(LoginRequiredMixin, DeleteView):
     '''Страница удаления комментария.'''
@@ -248,3 +259,8 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
             'blog:post_detail',
             kwargs={'post_id': self.kwargs['post_id']},
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_delete'] = True
+        return context
