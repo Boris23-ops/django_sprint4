@@ -51,7 +51,7 @@ class PostDetailView(DetailView):
         queryset = self.get_queryset()
         obj = get_object_or_404(
             queryset, pk=self.kwargs.get(self.pk_url_kwarg)
-            )
+              )
         if obj.author == self.request.user:
             return obj
         if obj.is_published:
