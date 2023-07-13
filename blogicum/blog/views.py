@@ -57,6 +57,17 @@ class PostDetailView(DetailView):
         )
         return context
 
+    def get_queryset(self):
+        self.author = get_object_or_404(User, username=self.kwargs['username'])
+        if self.request.user.username == self.kwargs['username']:
+            return Post.objects.select_related(
+                'location', 'category', 'author'
+            ).filter(
+                author=self.author
+            ).order_by('-pub_date').annotate(
+                comment_count=Count('post_comments')
+            )
+
     def get_success_url(self):
         return reverse_lazy('blog:profile',
                             kwargs={'username': self.object.author.username})
