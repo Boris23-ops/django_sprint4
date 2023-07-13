@@ -61,15 +61,6 @@ class PostDetailView(DetailView):
         return reverse_lazy('blog:profile',
                             kwargs={'username': self.object.author.username})
 
-    def check_post_data(self):
-        return all(
-            (
-                self.post_data.is_published,
-                self.post_data.pub_date,
-                self.post_data.category.is_published,
-            )
-        )
-
 
 class CategoryListView(PaginatorMixin, ListView):
     '''Страница отдельной категории.'''
