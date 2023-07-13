@@ -50,8 +50,13 @@ class PostDetailView(DetailView):
     def get_object(self, queryset=None):
         queryset = self.get_queryset()
         obj = get_object_or_404(
-            queryset, pk=self.kwargs.get(self.pk_url_kwarg))
-        return obj
+            queryset, pk=self.kwargs.get(self.pk_url_kwarg)
+            )
+        if obj.author == self.request.user:
+            return obj
+        if obj.is_published:
+            return obj
+        return None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
