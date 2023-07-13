@@ -1,7 +1,7 @@
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.urls import reverse_lazy, reverse
 from django.views.generic import (
@@ -47,16 +47,16 @@ class PostDetailView(DetailView):
     success_url = reverse_lazy('blog:index')
     pk_url_kwarg = 'post_id'
 
-    def get_object(self, queryset=None):
-        queryset = self.get_queryset()
-        obj = get_object_or_404(
-            queryset, pk=self.kwargs.get(self.pk_url_kwarg)
-        )
-        if obj.author == self.request.user:
-            return obj
-        if obj.is_published:
-            return obj
-        return None
+    def dispatch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        variable_author = instance.author != request.user
+
+        if (variable_author and (not instance.is_published
+                                 or (instance.category
+                                     and not instance.category.is_published)
+                                 or instance.pub_date > timezone.now())):
+            return render(request, 'pages/404.html', status=404)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
