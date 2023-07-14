@@ -94,7 +94,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static_dev',
+    BASE_DIR / 'static',
 ]
 
 CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
