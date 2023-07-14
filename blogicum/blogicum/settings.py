@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-omh4uj+z5m-czo#ii=ws9s^wd9-(ueni6j#tzfncj)jowgj#@a'
+SECRET_KEY = 'django-insecure-f3rh^#($hqit5g%t%j6ip4qzcla-(uu+vc$yqhc2u4zl4jz%4-'
 
 DEBUG = True
 
@@ -91,7 +91,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'static'
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static_dev',
