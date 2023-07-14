@@ -9,6 +9,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,7 +40,7 @@ INTERNAL_IPS = [
 
 ROOT_URLCONF = 'blogicum.urls'
 
-TEMPLATES_DIR = BASE_DIR / 'templates'
+TEMPLATES_DIR = BASE_DIR / "templates"
 
 TEMPLATES = [
     {
@@ -57,7 +58,9 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'blogicum.wsgi.application'
+
 
 DATABASES = {
     'default': {
@@ -65,6 +68,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -81,36 +85,36 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 LANGUAGE_CODE = 'ru-RU'
 
 TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
-STATIC_ROOT = BASE_DIR / 'static'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
-CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = 'blog:index'
+
+LOGIN_URL = 'login'
+
+LOGOUT_REDIRECT_URL = 'blog:index'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = BASE_DIR / 'media'
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
-MEDIA_ROOT = BASE_DIR / 'media'
-
-MEDIA_URL = 'media/'
-
-LOGOUT_REDIRECT_URL = '/auth/login/'
-
-LOGIN_URL = '/auth/login/'
-
-OUTPUT_SIMS = 30
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
