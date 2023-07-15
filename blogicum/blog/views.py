@@ -98,8 +98,7 @@ class PostDetailView(DetailView):
                 not instance.is_published
                 or (
                     instance.category and not instance.category.is_published
-                ) or
-                instance.pub_date > timezone.now()
+                ) or instance.pub_date > timezone.now()
             )
         ):
             return render(request, 'pages/404.html', status=404)
