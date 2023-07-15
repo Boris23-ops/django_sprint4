@@ -92,11 +92,16 @@ class PostDetailView(DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         instance = self.get_object()
-        if (instance.author != request.user and
-                (not instance.is_published or
-                 (instance.category and not
-                  instance.category.is_published) or
-                    instance.pub_date > timezone.now())):
+        if (
+            (instance.author != request.user) and
+            (
+                not instance.is_published or
+                (
+                    instance.category and not instance.category.is_published
+                ) or
+                instance.pub_date > timezone.now()
+            )
+        ):
             return render(request, 'pages/404.html', status=404)
         return super().dispatch(request, *args, **kwargs)
 
@@ -111,8 +116,9 @@ class PostDetailView(DetailView):
         return context
 
     def get_success_url(self):
-        return reverse_lazy('blog:profile',
-                            kwargs={'username': self.object.author.username})
+        return reverse_lazy(
+            'blog:profile', kwargs={'username': self.object.author.username}
+        )
 
 
 class CategoryListView(PaginatorMixin, ListView):
