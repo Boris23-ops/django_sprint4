@@ -7,7 +7,6 @@ admin.site.empty_value_display = 'Не задано'
 
 class PostInline(admin.StackedInline):
     model = Post
-    extra = 0
 
 
 class CategoryAdmin(admin.ModelAdmin):

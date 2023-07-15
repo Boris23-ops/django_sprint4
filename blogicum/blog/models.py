@@ -9,6 +9,7 @@ TEXT = 25
 
 class Category(Actions):
     '''Категория.'''
+
     title = models.CharField('Заголовок', max_length=256)
     description = models.TextField('Описание')
     slug = models.SlugField(
@@ -31,6 +32,7 @@ class Category(Actions):
 
 class Location(Actions):
     '''Местоположение.'''
+
     name = models.CharField('Название места', max_length=256)
 
     class Meta:
@@ -43,13 +45,16 @@ class Location(Actions):
 
 class Post(Actions):
     '''Публикация.'''
+
     title = models.CharField('Заголовок', max_length=256)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
         'Дата и время публикации',
-        help_text='Если установить дату'
-                  ' и время в будущем —'
-                  ' можно делать отложенные публикации.'
+        help_text=(
+            'Если установить дату '
+            'и время в будущем — можно делать '
+            'отложенные публикации.'
+        )
     )
     image = models.ImageField('Фото', upload_to='post_images', blank=True)
     author = models.ForeignKey(
@@ -84,6 +89,7 @@ class Post(Actions):
 
 class Comment(models.Model):
     '''Коммент'''
+
     text = models.TextField('Текст комментария', max_length=256)
     author = models.ForeignKey(
         User, on_delete=models.CASCADE,
@@ -92,7 +98,7 @@ class Comment(models.Model):
     post = models.ForeignKey(
         Post, on_delete=models.CASCADE,
         verbose_name='Пост',
-        related_name='post_comments',
+        related_name='comments',
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -105,3 +111,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Комментарий {self.author} к посту "{self.post}".'
+    
