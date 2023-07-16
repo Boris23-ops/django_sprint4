@@ -117,6 +117,7 @@ class CategoryListView(ListView):
             is_published=True,
             category__is_published=True,
             pub_date__lte=timezone.now(),
+            category=self.category
         ).order_by('-pub_date').annotate(comment_count=Count('comments'))
 
         return post_list
