@@ -1,9 +1,8 @@
 from django.db.models import Count
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
 )
@@ -31,13 +30,10 @@ class CommentMixin:
             kwargs={'post_id': self.kwargs['post_id']},
         )
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
 
 class PostMixin:
     '''Mixin для редактирования и удаления поста'''
+
     model = Post
     form_class = PostForm
     template_name = 'blog/create.html'
@@ -47,22 +43,6 @@ class PostMixin:
         if self.get_object().author != self.request.user:
             return redirect('blog:post_detail', self.kwargs['post_id'])
         return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-
-
-class PaginatorMixin:
-    '''Постраничный вывод для страницы категории.'''
-
-    def my_pagination(self, context, per_page=10):
-        paginator = Paginator(context['post_list'], per_page)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        page_obj = paginator.get_page(1)
-        context['page_obj'] = page_obj
-        return context
 
 
 class IndexListView(ListView):
@@ -120,7 +100,7 @@ class PostDetailView(DetailView):
         )
 
 
-class CategoryListView(PaginatorMixin, ListView):
+class CategoryListView(ListView):
     '''Страница отдельной категории.'''
 
     template_name = 'blog/category.html'
@@ -128,7 +108,7 @@ class CategoryListView(PaginatorMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        category = get_object_or_404(
+        self.category = get_object_or_404(
             Category,
             slug=self.kwargs['category_slug'],
             is_published=True)
@@ -137,7 +117,6 @@ class CategoryListView(PaginatorMixin, ListView):
             is_published=True,
             category__is_published=True,
             pub_date__lte=timezone.now(),
-            category=category
         ).order_by('-pub_date').annotate(comment_count=Count('comments'))
 
         return post_list
@@ -145,7 +124,7 @@ class CategoryListView(PaginatorMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = self.category
-        return self.my_pagination(context)
+        return context
 
 
 class ProfileListView(ListView):

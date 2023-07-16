@@ -12,7 +12,6 @@ urlpatterns = [
          views.RegistrationCreateView.as_view(),
          name='registration'),
     path('auth/', include('django.contrib.auth.urls')),
-    path('auth/', include('blog.urls')),
     path('', include('blog.urls', namespace='blog')),
 ]
 
